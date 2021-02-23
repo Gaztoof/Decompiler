@@ -63,8 +63,6 @@ int main(int argc, char** argv) {
 	LPVOID lpBase;
 	PIMAGE_DOS_HEADER dosHeader;
 	PIMAGE_NT_HEADERS ntHeader;
-	IMAGE_FILE_HEADER header;
-	IMAGE_OPTIONAL_HEADER opHeader;
 	PIMAGE_SECTION_HEADER pSecHeader;
 	hFile = CreateFile("C:\\Users\\frgli\\source\\repos\\Testing1\\Debug\\Testing1.exe", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	hMapObject = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
@@ -72,17 +70,15 @@ int main(int argc, char** argv) {
 	dosHeader = (PIMAGE_DOS_HEADER)lpBase;
 	ntHeader = (PIMAGE_NT_HEADERS)((DWORD)(dosHeader)+(dosHeader->e_lfanew));
 	if (ntHeader->Signature == IMAGE_NT_SIGNATURE) {
-		header = ntHeader->FileHeader;
-		if ((header.Characteristics & 0x0002) == 0x0002) printf("Executable Image ,");
-		if ((header.Characteristics & 0x0020) == 0x0020) printf("Application can address > 2GB ,");
-		if ((header.Characteristics & 0x1000) == 0x1000) printf("System file (Kernel Mode Driver(I think)) ,");
-		if ((header.Characteristics & 0x2000) == 0x2000) printf("Dll file ,");
-		if ((header.Characteristics & 0x4000) == 0x4000) printf("Application runs only in Uniprocessor ,");
-		opHeader = ntHeader->OptionalHeader;
-
 		for (pSecHeader = IMAGE_FIRST_SECTION(ntHeader), i = 0; i < ntHeader->FileHeader.NumberOfSections; i++, pSecHeader++) {
 			if (!strcmp(".text", (const char*)pSecHeader->Name))
+			{
 				Disassemble((char*)((DWORD)dosHeader + pSecHeader->PointerToRawData), pSecHeader->SizeOfRawData);
+			}
+			else if (i == ntHeader->FileHeader.NumberOfSections - 1)
+			{
+				printf("There was no .text section!");
+			}
 		}
 	}
 	UnmapViewOfFile(lpBase);

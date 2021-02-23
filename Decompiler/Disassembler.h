@@ -121,7 +121,7 @@ void PrintInstruction(char* bytes, int i, Instruction instr)
 }
 void Disassemble(char* bytes, int length)
 {
-	cout << "Disassembling " << length << " bytes.\n";
+	printf( "Disassembling %d bytes.\n", length);
 	for (int i = 0; i < length; i++)
 	{
 		//cout << hex << uppercase << setw(2) << (static_cast<unsigned int>(bytes[i]) & 0xFF) << " ";
