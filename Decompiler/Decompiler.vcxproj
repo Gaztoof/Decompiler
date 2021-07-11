@@ -146,6 +146,7 @@
     <ClInclude Include="Includes.h" />
     <ClInclude Include="Instruction.h" />
     <ClInclude Include="OpCodes.h" />
+    <ClInclude Include="peparsing.h" />
     <ClInclude Include="Registries.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
